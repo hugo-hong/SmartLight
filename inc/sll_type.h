@@ -1,12 +1,12 @@
 /**********************************************************************************
- * Copyright(C) 2018, 
+ * Copyright(C) 2018, blueberry LLC
  * All Rights Reserved.
  *
  * Confidential Information of 
  * This is UNPUBLISHED PROPRIETARY SOURCE CODE of ;
  * the contents of this file may not be disclosed to third parties, copied
  * or duplicated in any form, in whole or in part, without the prior
- * written permission of LEDVANCE LLC.
+ * written permission of blueberry LLC.
  * 
  * **************************** SMART LIGHT LIBRARY ****************************
  * This module contains the code for the Smart Light Library. This Library
