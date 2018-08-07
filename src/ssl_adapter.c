@@ -1,16 +1,16 @@
 /**********************************************************************************
- * Copyright(C) 2018, LEDVANCE LLC
+ * Copyright(C) 2018, blueberry LLC
  * All Rights Reserved.
  *
- * Confidential Information of LEDVANCE LLC
- * This is UNPUBLISHED PROPRIETARY SOURCE CODE of LEDVANCE LLC;
+ * Confidential Information of 
+ * This is UNPUBLISHED PROPRIETARY SOURCE CODE of ;
  * the contents of this file may not be disclosed to third parties, copied
  * or duplicated in any form, in whole or in part, without the prior
- * written permission of LEDVANCE LLC.
+ * written permission of blueberry LLC.
  * 
- * **************************** LEDVANCE SMART LIBRARY ****************************
- * This module contains the code for the Ledvance Smart Library. This Library
- * abstracts the ledvance specific lighting part and provides APIs that can be 
+ * **************************** SMART LIGHT LIBRARY ****************************
+ * This module contains the code for the Smart Light Library. This Library
+ * abstracts the specific lighting part and provides APIs that can be 
  * called to perform various operations on the Light bulbs. This is designed to be 
  * a generic interface that can be used by any protocol (Zigbee, Zwave, Bluetooth)
  * 
@@ -22,12 +22,12 @@
  * @data:2018-07-16
  * @history:
 */ 
-#include "led_type.h"
-#include "led_hal.h"
-#include "led_util.h"
-#include "light_characteristics.h"
-#include "light_control.h"
-#include "light_driver.h"
+#include "sll_type.h"
+#include "sll_hal.h"
+#include "sll_util.h"
+#include "sll_characteristics.h"
+#include "sll_control.h"
+#include "sll_driver.h"
 
 typedef struct {
     lsl_light_status_t bulbState;
@@ -81,7 +81,7 @@ static void task_updateStatus_cb(uint8_t action) {
     if (kBulbStatus.task_cb != NULL) kBulbStatus.task_cb(action);    
 }
 
-void light_init(bool_t reset) {
+void sll_init(bool_t reset) {
     lightCharas_init(reset);
     lightControl_init();
     lightDriver_init(task_updateStatus_cb);
@@ -91,7 +91,7 @@ lsl_light_status_t *light_getStatus(void) {
     return &kBulbStatus.bulbState;
 }
 
-void light_switchOn(uint16_t trans_time, task_action task_cb) {
+void sll_turnOn(uint16_t trans_time, task_action task_cb) {
     uint8_t on_off, level, mode;  
 
     //get current prop
@@ -109,7 +109,7 @@ void light_switchOn(uint16_t trans_time, task_action task_cb) {
 
     //do action
     if (CTL == mode) {
-        lsl_light_ctl_data_t ctl_data;
+        sll_light_ctl_data_t ctl_data;
         ctl_data.brightness = level;
         ctl_data.trans_time = trans_time;
         lightCharas_getProperty(CCT, &ctl_data.temperature);
@@ -125,7 +125,7 @@ void light_switchOn(uint16_t trans_time, task_action task_cb) {
     }   
 }
 
-void light_switchOff(uint16_t trans_time, task_action task_cb) {
+void sll_turnOff(uint16_t trans_time, task_action task_cb) {
     uint8_t on_off, level, mode;
 
     //get current prop
@@ -164,11 +164,11 @@ void light_registerReset(task_action reset_cb) {
     lightControl_triggerResetAction(reset_cb);
 }
 
-void light_startSequence(lsl_sequence_mode_t mode) {
+void sll_startSequence(sll_sequence_mode_t mode) {
     lightControl_triggerSequenceAction(task_sequence_ind_cb, mode);
 }
 
-void light_haltSequnce() {
+void sll_haltSequnce() {
     //stop sequence task
     REVOKE_TASK_ACTION(kTimers[SEQUENCE]);
 
@@ -176,7 +176,7 @@ void light_haltSequnce() {
     light_switchOff(0, NULL);   
 }
 
-void light_setCTL(lsl_light_ctl_data_t *p_ctl, task_action task_cb) {
+void sll_setCTL(sll_light_ctl_data_t *p_ctl, task_action task_cb) {
     uint8_t level;
     uint16_t curCCT, minCCT, maxCCT;
     lsl_color_mode_t mode;
@@ -207,7 +207,7 @@ void light_setCTL(lsl_light_ctl_data_t *p_ctl, task_action task_cb) {
     lightDriver_setGlow(p_ctl, CTL, task_cb == NULL ? NULL : task_updateStatus_cb);
 }
 
-void light_setHSL(lsl_light_hsl_data_t *p_hsl, task_action task_cb) {
+void sll_setHSL(sll_light_hsl_data_t *p_hsl, task_action task_cb) {
     uint8_t hue, sat, level;
     lsl_color_mode_t mode;
 
